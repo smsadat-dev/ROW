@@ -23,9 +23,18 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    SDL_FillRect(winSurf, nullptr, SDL_MapRGB(winSurf->format, 255, 90, 120));
-    SDL_UpdateWindowSurface(win);
+    int r = 0, g = 0, b = 0;
+    while (true)
+    {
+        SDL_FillRect(winSurf, nullptr, SDL_MapRGB(winSurf->format, r, g, b));
+        SDL_UpdateWindowSurface(win);
 
+        r += (r+2)*3;
+        g += (g+1)*2;
+        b += (b+0)*1;
+    }
+
+    
     SDL_DestroyWindow(win);
     win = nullptr;
     winSurf = nullptr; 
