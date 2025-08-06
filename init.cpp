@@ -22,7 +22,21 @@ bool ROWMAIN::init()
         return false;
     }
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-    SDL_RenderClear(renderer);
+    buffer = SDL_LoadBMP("res/car.bmp");
+    if(!buffer)
+    {
+        ROWerror("Error loading image \"res/car.bmp\":");
+        return false;
+    }
+
+    texture = SDL_CreateTextureFromSurface(renderer, buffer);
+    if(!texture)
+    {
+        ROWerror("Error creating texture for \"res/car.bmp\":");
+        return false;
+    }
+
+    // SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+    // SDL_RenderClear(renderer);
     return true;
 }

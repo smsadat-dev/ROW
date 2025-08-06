@@ -22,11 +22,13 @@ class ROWMAIN
 {
 private:
     SDL_Event e;
-    SDL_Rect r;
+    SDL_Rect rect;
 
 public:
     SDL_Window* win;
     SDL_Renderer* renderer;
+    SDL_Surface* buffer;
+    SDL_Texture* texture;
 
     bool init();
     bool run();
