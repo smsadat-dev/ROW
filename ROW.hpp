@@ -7,6 +7,8 @@
 
 // ===== SDL ======
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 
 // ROW 
@@ -24,18 +26,37 @@ private:
     SDL_Event e;
     SDL_Rect rect;
 
+    SDL_Surface* buffer;
+    Mix_Music* music;
+    Mix_Chunk* sound;
+
+    bool loadImage(SDL_Surface*& buffer, std::string imgFile);
+    bool loadMusic(Mix_Music*& music, std::string musFile);
+    bool loadSound(Mix_Chunk*& sound, std::string sndFile);
+
 public:
     SDL_Window* win;
     SDL_Renderer* renderer;
-    SDL_Surface* buffer;
     SDL_Texture* texture;
 
     bool init();
+    bool initSDL_image(IMG_InitFlags imgInitflag);
+    bool initSDL_mixer(int fq, Uint16 fmt, int channel, int chunksize);
+
     bool run();
     void end();
 };
 
-void ROWerror(std::string errMesg);
+typedef enum 
+{
+    SDL,
+    IMG,
+    AUD,
+    TXT,
+}ROWtypes;
+
+
+void ROWerror(std::string errMesg, ROWtypes t);
 
 
 #endif

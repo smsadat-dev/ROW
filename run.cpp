@@ -12,6 +12,7 @@ bool ROWMAIN::run()
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
 
+	int hudaiCounter = 0;
     while (SDL_PollEvent(&e) != 0)
     {
         switch ( e.type ) 
@@ -21,16 +22,16 @@ bool ROWMAIN::run()
 			case SDL_MOUSEBUTTONDOWN:
 				mx0 = e.button.x;
 				my0 = e.button.y;
-				std::cout << "mbtndown\n";
+				std::cout << "mbtndown[" << hudaiCounter << "]\n";
 				break;
 			case SDL_MOUSEMOTION:
 				mx1 = e.motion.x;
 				my1 = e.motion.y;
-				std::cout << "mmove\n";
+				std::cout << "mmove[" << hudaiCounter << "]\n";
 				break;
 			case SDL_MOUSEBUTTONUP:
 				mx0 = my0 = mx1 = my1 = -1;
-				std::cout << "mbtnup\n";
+				std::cout << "mbtnup[" << hudaiCounter << "]\n";
 				break;
 			case SDLK_w:
 				std::cout << "w\n";
@@ -44,10 +45,27 @@ bool ROWMAIN::run()
 			case SDLK_d:
 				std::cout << "d\n";
 				break;
+			case SDL_KEYDOWN:
+				if(e.key.keysym.sym == SDLK_SPACE)
+				{
+					if(Mix_PausedMusic() == 1)
+					{
+						Mix_ResumeMusic();
+					}
+					else 
+					{
+						Mix_PauseMusic();
+					}
+				}
+				else if(e.key.keysym.sym == SDLK_ESCAPE)
+				{
+					Mix_HaltMusic();
+				}
 
 			default:
 				break;
 		}
+		hudaiCounter++;
     }
     
     // Set drawing color to whatever
@@ -68,17 +86,28 @@ bool ROWMAIN::run()
 		g = round(255 * hprcnt);
 
 		// b always 0
+		
 		SDL_SetTextureColorMod(texture, r, g, b = 0);
+		mx1 -= 320;
+		my1 -= 240;
+		rotation = atan( ((float)my1/(float)mx1) * (180.0f/3.14159) );
+
+		if(mx1 < 0)
+		{
+			rotation -= 180;
+		}
 	}
+
+	mx1 = my1 = -1;
 	
-	// if(mx0 != -1)
-	// {
-	// 	r.x = 240;
-	// 	r.y = 180;
-	// 	r.w = 400;
-	// 	r.h = 300;
-	// 	SDL_RenderFillRect(renderer, &r);
-	// }
+	if(mx0 != -1)
+	{
+		rect.x = mx0;
+		rect.y = my0;
+		rect.w = 400;
+		rect.h = 300;
+		SDL_RenderFillRect(renderer, &rect);
+	}
 
 	SDL_RenderCopyEx(renderer, texture, NULL, &rect, rotation, NULL, 
 		keys[SDL_SCANCODE_F] ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE);

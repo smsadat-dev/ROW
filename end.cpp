@@ -2,15 +2,28 @@
 
 void ROWMAIN::end()
 {
-    if(buffer)
-    {
-        SDL_FreeSurface(buffer);
-    }
-
     if(texture)
     {
         SDL_DestroyTexture(texture);
         texture = nullptr;
+    }
+
+    if(buffer)
+    {
+        SDL_FreeSurface(buffer);
+        buffer = nullptr;
+    }
+
+    if(music)
+    {
+        Mix_FreeMusic(music);
+        music = nullptr;
+    }
+
+    if(sound)
+    {
+        Mix_FreeChunk(sound);
+        sound = nullptr;
     }
 
     if(renderer)
