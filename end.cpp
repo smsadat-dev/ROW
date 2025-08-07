@@ -1,11 +1,12 @@
 #include "ROW.hpp"
 
-void ROWMAIN::end()
+void ROWMAIN::kill()
 {
-    if(texture)
+    if(font)
     {
-        SDL_DestroyTexture(texture);
-        texture = nullptr;
+        SDL_StopTextInput();
+        TTF_CloseFont(font);
+        font = nullptr;
     }
 
     if(buffer)
@@ -38,5 +39,10 @@ void ROWMAIN::end()
         win = nullptr;
     }
 
+    TTF_Quit();
+    IMG_Quit();
+	Mix_Quit();
+    SDL_QuitSubSystem(SDL_INIT_EVENTS);
+    SDL_QuitSubSystem(SDL_INIT_TIMER);
     SDL_Quit();
 }

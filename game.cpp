@@ -14,7 +14,7 @@ int main(int argc, char const *argv[])
         SDL_Delay(100);
     }
     
-    rm.end();
+    rm.kill();
 
     return 0;
 }

@@ -2,11 +2,23 @@
 
 bool ROWMAIN::init()
 {
-    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+    if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
     {
+        std::cerr << "Failed to start SDL events:" << SDL_GetError() << '\n';
+    }
 
-        ROWerror("Error initiating SDL:", SDL);
-        return false;
+    if(SDL_InitSubSystem(SDL_INIT_TIMER) < 0)
+    {
+        std::cerr << "Failed to start SDL timer:" << SDL_GetError() << '\n';
+    }
+
+    if(SDL_WasInit(SDL_INIT_EVENTS) == SDL_INIT_EVENTS)
+    {
+        std::cout << "SDL events initialized\n";
+    }
+    if(SDL_WasInit(SDL_INIT_TIMER) == SDL_INIT_TIMER)
+    {
+        std::cout << "SDL timer initialized\n";
     }
 
     if(!initSDL_image(IMG_INIT_PNG))
@@ -15,30 +27,36 @@ bool ROWMAIN::init()
     if(!initSDL_mixer(44100, MIX_DEFAULT_FORMAT, 2, 1024))
         return false;
 
-    win = SDL_CreateWindow(ROW, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1000, 600, 0);
+    if(!initSDL_ttf())
+        return false;
+
+    // for debugging purpose
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
+
+
+    win = SDL_CreateWindow(ROW, 100, 100, ROW_WINW, ROW_WINH, 0);
     if(!win)
     {
         ROWerror("Error creating window:", SDL);
         return false;
     }
 
-    renderer = SDL_CreateRenderer(win, -1, 0);
+    renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if(!renderer)
     {
-        ROWerror("Error creating renderer:", SDL);
-        return false;
+        std::cerr << "Error rendering :" << SDL_GetError() << '\n';
     }
+
+
+    // renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    // if(!renderer)
+    // {
+    //     ROWerror("Error creating renderer:", SDL);
+    //     return false;
+    // }
 
     if(!loadImage(buffer, "res/cyberpunk.bmp"))
         return false;
-
-    // make texture without image
-    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 1024, 1024);
-    if(!texture)
-    {
-        ROWerror("Error creating texture for \"res/car.bmp\":", SDL);
-        return false;
-    }
 
     if(!loadMusic(music, "res/HOME-Resonance.wav"))
         return false;
@@ -46,28 +64,10 @@ bool ROWMAIN::init()
     if(!loadSound(sound, "res/metal pipe.wav"))
         return false;
 
-    unsigned char* pixels;
-    int pitch;
-    int textureW, textureH, access;
-    unsigned int textureFmt;
+    if(!loadFont(font, "res/chilispepper.ttf", 72))
+        return false;
 
     Mix_PlayMusic(music, -1);
-
-    // get texture info
-    // SDL_QueryTexture(texture, &textureFmt, &access, &textureW, &textureH);
-
-    // SDL_LockTexture(texture, NULL, (void**)&pixels, &pitch);
-
-    // set pixels to solid white
-
-    // for(int i = 0; i < pitch * textureH; i++)
-    // {
-    //     pixels[i] = 255;
-    // }
-
-    // SDL_UnlockTexture(texture);
-
-    // SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-    // SDL_RenderClear(renderer);
+    
     return true;
 }

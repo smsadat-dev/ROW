@@ -17,7 +17,8 @@ void ROWerror(std::string errMesg, ROWtypes t)
         << Mix_GetError() << '\n';
         break;
     case TXT:
-        /* code */
+        std::cerr << "ROW: " << errMesg << '\n'
+        << TTF_GetError() << '\n';
         break;
     default:
         break;
