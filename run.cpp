@@ -1,13 +1,21 @@
 #include "ROW.hpp"
+#include "entity.hpp"
 
 bool ROWMAIN::run()
 {
+    std::string textToShow = "Hello World";
 	// Clear the window to white
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
     rect = {0, 0, 10, 10};
-
+    
+    Entity e;
+    e.isAlive = true;
+    e.maxHealth = e.currHealth = 100;
+    
 	bool running = true;
+
+    SDL_StartTextInput();
     while(running)
     {
         start = SDL_GetPerformanceCounter();
@@ -18,6 +26,12 @@ bool ROWMAIN::run()
             if(event.type == SDL_QUIT)
             {
                 running = false;
+            }
+
+            if(event.type == SDL_TEXTINPUT)
+            {
+                textInput += event.text.text;
+                std::cout << "> " << textInput << '\n';
             }
 
             if(event.type == SDL_KEYDOWN)
@@ -84,24 +98,26 @@ bool ROWMAIN::run()
                     break;
                 }
             }
-        }
+       }
+       
         
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // draw a blue rectangle
-        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-
-        if(SDL_RenderFillRect(renderer, &rect) < 0)
+        if(!renderText(textTexture, text, font, textToShow))
         {
-            std::cerr << "Failed to fill rectangle: " << SDL_GetError() << '\n';
+            ROWerror("Error rendering text", TXT);
         }
+        
+        e.renderEntity(renderer, &rect, {0, 0, 255, 255});
+
         SDL_RenderPresent(renderer);
 
         end = SDL_GetPerformanceCounter();
         float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
         std::cout << "FPS: " << std::to_string(1.0f / elapsed) << std::endl;
     }
+    SDL_StopTextInput();
 	
     return running;
 }

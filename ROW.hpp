@@ -2,8 +2,11 @@
 #define ROW_HPP
 
 // ===== C++ =====
+#include <algorithm>
 #include <iostream>
-
+#include <memory>
+#include <string>
+#include <vector>
 
 // ===== SDL ======
 #include <SDL2/SDL.h>
@@ -30,12 +33,18 @@ private:
     SDL_Event e;
     SDL_Rect rect;
 
-    SDL_Surface* buffer;
-    Mix_Music* music;
-    Mix_Chunk* sound;
-    TTF_Font * font;
+    SDL_Surface* buffer; 
 
-    SDL_Surface* surface = nullptr;
+    Mix_Music* music; 
+    Mix_Chunk* sound; 
+
+    TTF_Font * font; 
+    SDL_Surface* text; 
+    SDL_Texture* textTexture; 
+    SDL_Rect textDest;
+    std::string textInput;
+
+    SDL_Surface* surface; 
     Uint16 color = 0;
 
     SDL_Event event;
@@ -50,9 +59,11 @@ private:
     bool loadSound(Mix_Chunk*& sound, std::string sndFile);
     bool loadFont(TTF_Font*& font, std::string fontFile, int ptsSize);
 
+    bool renderText(SDL_Texture*& tTexture, SDL_Surface*& textSurf, TTF_Font*& font, std::string& text);
+
 public:
-    SDL_Window* win;
-    SDL_Renderer* renderer;
+    SDL_Window* win; 
+    SDL_Renderer* renderer; 
 
     bool init();
     bool initSDL_image(IMG_InitFlags imgInitflag);

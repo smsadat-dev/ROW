@@ -9,6 +9,18 @@ void ROWMAIN::kill()
         font = nullptr;
     }
 
+    if(text)
+    {
+        SDL_FreeSurface(text);
+        text = nullptr;
+    }
+
+    if(textTexture)
+    {
+        SDL_DestroyTexture(textTexture);
+        textTexture = nullptr;
+    }
+
     if(buffer)
     {
         SDL_FreeSurface(buffer);
@@ -26,6 +38,12 @@ void ROWMAIN::kill()
         Mix_FreeChunk(sound);
         sound = nullptr;
     }
+
+    // if(surface)
+    // {
+    //     SDL_FreeSurface(surface);
+    //     surface = nullptr;
+    // }
 
     if(renderer)
     {

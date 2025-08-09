@@ -47,14 +47,6 @@ bool ROWMAIN::init()
         std::cerr << "Error rendering :" << SDL_GetError() << '\n';
     }
 
-
-    // renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    // if(!renderer)
-    // {
-    //     ROWerror("Error creating renderer:", SDL);
-    //     return false;
-    // }
-
     if(!loadImage(buffer, "res/cyberpunk.bmp"))
         return false;
 
@@ -66,8 +58,6 @@ bool ROWMAIN::init()
 
     if(!loadFont(font, "res/chilispepper.ttf", 72))
         return false;
-
-    Mix_PlayMusic(music, -1);
     
     return true;
 }
