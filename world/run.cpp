@@ -1,5 +1,5 @@
-#include "ROW.hpp"
-#include "entity.hpp"
+#include "../ROW.hpp"
+#include "../entity.hpp"
 
 bool ROWMAIN::run()
 {

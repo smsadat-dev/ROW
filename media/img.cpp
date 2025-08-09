@@ -1,4 +1,4 @@
-#include "ROW.hpp"
+#include "../ROW.hpp"
 
 bool ROWMAIN::initSDL_image(IMG_InitFlags imgInitflag)
 {

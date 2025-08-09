@@ -1,4 +1,4 @@
-#include "ROW.hpp"
+#include "../ROW.hpp"
 
 bool ROWMAIN::initSDL_mixer(int fq, Uint16 fmt, int channel, int chunksize)
 {
