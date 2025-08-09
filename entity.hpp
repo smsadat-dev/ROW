@@ -11,27 +11,8 @@ struct EntityRGBA
     int a;
 };
 
-class Entity
-{
-public:
-    // SDL_Texture* texture;
-    bool isAlive;
-    int currHealth, maxHealth;
 
-    virtual void renderEntity(SDL_Renderer*& entityRender, SDL_Rect* entityRect, EntityRGBA eRGBA);
-    virtual void updateEntity(SDL_Renderer* entityRender, SDL_Rect* entityRect);
-    Entity() {};
-
-    // Entity(int x, int y, int w, int h)
-    // {
-        
-    // }
-
-    ~Entity() {}
-}; 
-
-
-class Healthbar : public Entity
+class Healthbar
 {
 public:
     void updateHealth(int maxHealth, int currHealth);
@@ -39,21 +20,51 @@ public:
     ~Healthbar() {}
 };
 
-// class Player : public Entity
-// {
-// private:
-//     Healthbar hb;
-// public:
 
-//     Player(int maxHealth) {};
+class Entity
+{
+private:
+    Healthbar hb;
 
-//     ~Player();
-// };
+public:
+    // SDL_Texture* texture;
+    bool isAlive;
+    int currHealth, maxHealth;
+
+    ~Entity() {}
+}; 
+
+
+class Player : public Entity
+{
+public:
+
+    void renderPlayer(SDL_Renderer*& renderer, SDL_Rect* rect,  EntityRGBA eRGBA);
+
+    Player() {};
+
+    ~Player() {};
+};
 
 class Enemy : public Entity
 {
 private:
-    Healthbar hb;
+    SDL_Rect enemyRect;
+
+public:
+
+    void renderEnemy(SDL_Renderer*& renderer,  EntityRGBA eRGBA);
+    void updateEnemy();
+
+    Enemy(int w, int h, int x, int y) 
+    {
+        enemyRect.h = h;
+        enemyRect.w = w;
+        enemyRect.x = x;
+        enemyRect.y = y;
+    };
+
+    ~Enemy() {};
 };
 
 class Boss : public Entity
@@ -61,6 +72,7 @@ class Boss : public Entity
 private:
     Healthbar hb;
 };
+
 
 
 #endif

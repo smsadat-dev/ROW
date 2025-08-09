@@ -3,15 +3,30 @@
 
 bool ROWMAIN::run()
 {
-    std::string textToShow = "Hello World";
+    std::vector<std::unique_ptr<Enemy>> enemies;
+
+    // create 5 enemies
+    for(int i = 0; i < 5; i++)
+    {
+        enemies.push_back(std::make_unique<Enemy>(10, 10, 100*i, 150*i));
+    }
+
+    // std::string textToShow = "Hello World";
+    std::string textToShow = " ";
+
+
 	// Clear the window to white
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
-    rect = {0, 0, 10, 10};
+    rect = {0, 0, 20, 20};
     
-    Entity e;
-    e.isAlive = true;
-    e.maxHealth = e.currHealth = 100;
+    // Entity e{rect};
+    // e.isAlive = true;
+    // e.maxHealth = e.currHealth = 100;
+
+    Player p;
+    p.isAlive = true;
+    p.maxHealth = p.currHealth = 100;
     
 	bool running = true;
 
@@ -39,6 +54,7 @@ bool ROWMAIN::run()
                 kcode = event.key.keysym.sym;
                 switch (kcode)
                 {
+
                     case SDLK_w: 
                     case SDLK_UP:
                         rect.y -= 10;
@@ -109,8 +125,16 @@ bool ROWMAIN::run()
             ROWerror("Error rendering text", TXT);
         }
         
-        e.renderEntity(renderer, &rect, {0, 0, 255, 255});
+        p.renderPlayer(renderer, &rect, {0, 0, 255, 255});
 
+        // render all enemies
+        for(auto& enemy : enemies)
+        {
+            enemy->renderEnemy(renderer, {255, 0, 0, 255});
+            enemy->updateEnemy();
+        }
+
+        
         SDL_RenderPresent(renderer);
 
         end = SDL_GetPerformanceCounter();
